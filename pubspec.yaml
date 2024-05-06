@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.6
   flutter_svg: ^2.0.10+1
   syncfusion_flutter_pdfviewer: ^24.2.8
+  lottie: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,7 @@ flutter:
   assets:
     - Assets/Images/
     - Assets/Icons/
+    - Assets/Animation/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

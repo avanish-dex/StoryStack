@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storystack/Config/themes.dart';
+import 'package:storystack/pages/SplacePage/splacepage.dart';
+// ignore: unused_import
 import 'package:storystack/pages/welcome_page.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'StoryStack',
       theme: lightTheme,
-      home: const WelcomePage(),
+      home: SplacePage(),
     );
   }
 }
