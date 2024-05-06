@@ -8,9 +8,11 @@ class BookTile extends StatelessWidget {
   final int price;
   final String rating;
   final int totalRatings;
+  final VoidCallback onTap;
   const BookTile(
       {super.key,
       required this.title,
+      required this.onTap,
       required this.coverUrl,
       required this.author,
       required this.price,

@@ -1,6 +1,8 @@
+import 'package:get/get.dart';
 import 'package:storystack/Config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:storystack/pages/ProfilePage/profile_page.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -17,11 +19,16 @@ class HomeAppBar extends StatelessWidget {
                   .textTheme
                   .headlineMedium
                   ?.copyWith(color: Theme.of(context).colorScheme.background)),
-          CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            child: const Text(
-              "A",
-              style: TextStyle(color: primaryColor),
+          InkWell(
+            onTap: () {
+              Get.to(ProfilePage());
+            },
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              child: const Text(
+                "A",
+                style: TextStyle(color: primaryColor),
+              ),
             ),
           )
         ]);

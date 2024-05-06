@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:storystack/Components/bookcard.dart';
 import 'package:storystack/Components/booktile.dart';
 import 'package:storystack/Models/category_data.dart';
+import 'package:storystack/pages/BookDetails/bookdetails.dart';
 import 'package:storystack/pages/HomePage/Widget/appbar.dart';
 import 'package:storystack/pages/HomePage/Widget/categorywidget.dart';
 import 'package:storystack/pages/HomePage/Widget/inputtextfield.dart';
@@ -31,7 +33,7 @@ class HomePage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Good Morning 🤓👆",
+                        "Good Morning ",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).colorScheme.background,
                             ),
@@ -51,7 +53,7 @@ class HomePage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Time to read book and get smart smart",
+                        "Time to read book and relax",
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Theme.of(context).colorScheme.background,
                             ),
@@ -113,7 +115,9 @@ class HomePage extends StatelessWidget {
                             (e) => BookCard(
                               title: e.title!,
                               coverUrl: e.coverUrl!,
-                              ontap: () {},
+                              ontap: () {
+                                Get.to(() => BookDetails(book: e));
+                              },
                             ),
                           )
                           .toList(),
@@ -135,13 +139,21 @@ class HomePage extends StatelessWidget {
                   ),
                   Column(
                       children: bookData
-                          .map((e) => BookTile(
-                              title: e.title!,
-                              coverUrl: e.coverUrl!,
-                              author: e.author!,
-                              price: e.price!,
-                              rating: e.rating!,
-                              totalRatings: e.totalRatings!))
+                          .map((e) => InkWell(
+                                onDoubleTap: () {
+                                  Get.to(() => BookDetails(book: e));
+                                },
+                                child: BookTile(
+                                    title: e.title!,
+                                    onTap: () {
+                                      Get.to(() => BookDetails(book: e));
+                                    },
+                                    coverUrl: e.coverUrl!,
+                                    author: e.author!,
+                                    price: e.price!,
+                                    rating: e.rating!,
+                                    totalRatings: e.totalRatings!),
+                              ))
                           .toList())
                 ],
               ),

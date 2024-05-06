@@ -103,7 +103,7 @@ class WelcomePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: PrimaryButton(
-                btnName: " SIGN IN???",
+                btnName: " SIGN IN",
                 ontap: () {
                   Get.offAll(const HomePage());
                 },
