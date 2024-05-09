@@ -4,10 +4,4 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfController extends GetxController {
   final GlobalKey<SfPdfViewerState> pdfViewerKey = GlobalKey();
-
-  @override
-  // ignore: unnecessary_overrides
-  void onInit() {
-    super.onInit();
-  }
 }

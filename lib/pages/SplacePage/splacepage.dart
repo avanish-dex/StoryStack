@@ -1,6 +1,9 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:storystack/Controller/bookcontroller.dart';
 import 'package:storystack/Controller/splacecontroller.dart';
 
 class SplacePage extends StatelessWidget {
@@ -8,8 +11,8 @@ class SplacePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     SplaceController splaceController = Get.put(SplaceController());
+    BookController bookController = Get.put(BookController());
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Center(

@@ -1,9 +1,14 @@
+// ignore_for_file: unused_import, unnecessary_import
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:storystack/Components/bookcard.dart';
 import 'package:storystack/Components/booktile.dart';
+import 'package:storystack/Components/mydrawer.dart';
+import 'package:storystack/Controller/bookcontroller.dart';
+import 'package:storystack/Models/book_model.dart';
 import 'package:storystack/Models/category_data.dart';
 import 'package:storystack/pages/BookDetails/bookdetails.dart';
 import 'package:storystack/pages/HomePage/Widget/appbar.dart';
@@ -11,12 +16,14 @@ import 'package:storystack/pages/HomePage/Widget/categorywidget.dart';
 import 'package:storystack/pages/HomePage/Widget/inputtextfield.dart';
 
 class HomePage extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const HomePage({Key? key});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    BookController bookController = Get.put(BookController());
+    bookController.getUserBook();
     return Scaffold(
+      drawer: myDrawer,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -24,71 +31,114 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
               color: Theme.of(context).colorScheme.primary,
               // height: 500,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 30),
-                  const HomeAppBar(),
-                  const SizedBox(height: 50),
-                  Row(
-                    children: [
-                      Text(
-                        "Good Morning ",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.background,
+              child: Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 30),
+                          const HomeAppBar(),
+                          const SizedBox(height: 50),
+                          Row(
+                            children: [
+                              Text(
+                                "Good Morining✌️",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                    ),
+                              ),
+                              Flexible(
+                                child: Text(
+                                  bookController.getUsernameFromFirebase() ??
+                                      'User', // Provide a default value if username is null
+                                  maxLines: 1, // Limit the number of lines to 1
+                                  overflow: TextOverflow
+                                      .ellipsis, // Use ellipsis (...) for overflowed text
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  "Time to read book and enhance your knowledge",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: MyInputTextField(
+                                        booksList:
+                                            bookController.bookData.toList()))
+                              ],
                             ),
-                      ),
-                      Text(
-                        "Duck",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.background,
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Text(
+                                "Topics",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: categoryData
+                                  .map(
+                                    (e) => CategoryWidget(
+                                        iconPath: e["icon"]!,
+                                        btnName: e["lebel"]!),
+                                  )
+                                  .toList(),
                             ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Time to read book and relax",
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.background,
-                            ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const MyInputTextField(),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Text(
-                        "Topics",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.background,
-                            ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: categoryData
-                          .map(
-                            (e) => CategoryWidget(
-                                iconPath: e["icon"]!, btnName: e["lebel"]!),
                           )
-                          .toList(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -104,57 +154,58 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: bookData
-                          .map(
-                            (e) => BookCard(
-                              title: e.title!,
-                              coverUrl: e.coverUrl!,
-                              ontap: () {
-                                Get.to(() => BookDetails(book: e));
-                              },
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(
+                        () => Row(
+                          children: bookController.bookData
+                              .map(
+                                (e) => BookCard(
+                                  title: e.title!,
+                                  coverUrl: e.coverUrl!,
+                                  ontap: () {
+                                    Get.to(BookDetails(
+                                      book: e,
+                                    ));
+                                  },
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      )),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Text(
                         "Your Interests",
                         style: Theme.of(context).textTheme.labelMedium,
-                      )
+                      ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Column(
-                      children: bookData
-                          .map((e) => InkWell(
-                                onDoubleTap: () {
-                                  Get.to(() => BookDetails(book: e));
+                  const SizedBox(height: 10),
+                  Obx(() => Column(
+                        children: bookController.bookData
+                            .map(
+                              (e) => BookTile(
+                                onTap: () {
+                                  // Primary tap action
+                                  Get.to(BookDetails(book: e));
                                 },
-                                child: BookTile(
-                                    title: e.title!,
-                                    onTap: () {
-                                      Get.to(() => BookDetails(book: e));
-                                    },
-                                    coverUrl: e.coverUrl!,
-                                    author: e.author!,
-                                    price: e.price!,
-                                    rating: e.rating!,
-                                    totalRatings: e.totalRatings!),
-                              ))
-                          .toList())
+                                ontap: () {
+                                  // Secondary tap action
+                                  // Implement what should happen on double tap here
+                                },
+                                title: e.title!,
+                                coverUrl: e.coverUrl!,
+                                author: e.author!,
+                                price: e.price!,
+                                rating: e.rating!,
+                                totalRatings: "12",
+                              ),
+                            )
+                            .toList(),
+                      )),
                 ],
               ),
             ),

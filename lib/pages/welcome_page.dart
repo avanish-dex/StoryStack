@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:storystack/Components/button.dart';
+import 'package:storystack/Controller/authController.dart';
+// ignore: unused_import
 import 'package:storystack/pages/HomePage/home_page.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -9,6 +11,7 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthController authController = Get.put(AuthController());
     return Scaffold(
       body: Stack(
         children: [
@@ -105,7 +108,7 @@ class WelcomePage extends StatelessWidget {
               child: PrimaryButton(
                 btnName: " SIGN IN",
                 ontap: () {
-                  Get.offAll(const HomePage());
+                  authController.loginWithEmail();
                 },
               ),
             ),

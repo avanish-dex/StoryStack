@@ -13,7 +13,7 @@ class BookModel {
   String? category;
   String? coverUrl;
   int? price;
-  int? totalRatings;
+  String? totalRatings;
 
   BookModel(
       {this.id,
@@ -30,7 +30,8 @@ class BookModel {
       this.category,
       this.price,
       this.coverUrl,
-      this.totalRatings});
+      this.totalRatings,
+      required String numberofRatings});
 
   BookModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {
@@ -75,7 +76,7 @@ class BookModel {
     if (json["price"] is int) {
       price = json["price"];
     }
-    if (json["numberofRating"] is int) {
+    if (json["numberofRating"] is String) {
       totalRatings = json["totalRatings"];
     }
   }

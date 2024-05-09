@@ -1,9 +1,15 @@
+// ignore_for_file: unused_local_variable, unnecessary_import
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:storystack/Components/backbutton.dart';
 import 'package:storystack/Components/multilineformfield.dart';
 import 'package:storystack/Components/textfield.dart';
+import 'package:storystack/Config/colors.dart';
+import 'package:storystack/Controller/bookcontroller.dart';
+import 'package:storystack/Controller/pdfcontroller.dart';
 
 class AddNewBookPage extends StatelessWidget {
   const AddNewBookPage({super.key});
@@ -11,281 +17,315 @@ class AddNewBookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
+
+    PdfController pdfController = Get.put(PdfController());
+    BookController bookController = Get.put(BookController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+              // height: 500,
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
               color: Theme.of(context).colorScheme.primary,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              MyBackButton(),
-                              Text("Add New Book",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .background)),
-                              const SizedBox(
-                                height: 100,
-                                width: 65,
-                              ),
-                            ]),
-                        Container(
-                          height: 190,
-                          width: 150,
-                          decoration: BoxDecoration(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const MyBackButton(),
+                          Text(
+                            "ADD NEW BOOK",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                ),
+                          ),
+                          const SizedBox(width: 70)
+                        ],
+                      ),
+                      const SizedBox(height: 60),
+                      InkWell(
+                        onTap: () {
+                          bookController.pickImage();
+                        },
+                        child: Obx(
+                          () => Container(
+                            height: 190,
+                            width: 150,
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).colorScheme.background),
-                          child: Icon(Icons.add),
+                              color: Theme.of(context).colorScheme.background,
+                            ),
+                            child: Center(
+                              child: bookController.isImageUploading.value
+                                  ? const CircularProgressIndicator(
+                                      color: primaryColor,
+                                    )
+                                  : bookController.imageUrl.value == ""
+                                      ? Image.asset(
+                                          "Assets/Icons/addImage.png",
+                                          fit: BoxFit
+                                              .cover, // Apply BoxFit.cover to the placeholder image
+                                        )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.network(
+                                            bookController.imageUrl.value,
+                                            fit: BoxFit
+                                                .cover, // Apply BoxFit.cover to the uploaded image
+                                          ),
+                                        ),
+                            ),
+                          ),
                         ),
-                        SizedBox(height: 20),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
-                ],
-              ),
+                )
+              ]),
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(16),
+              child: Column(children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Obx(
+                        () => Container(
+                          padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: bookController.pdfUrl.value == ""
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.background,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.upload_sharp,
-                                color: Theme.of(context).colorScheme.background,
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Book PDF",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background),
-                              )
-                            ],
-                          ),
+                          child: bookController.isPdfUploading.value
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: backgroudColor,
+                                  ),
+                                )
+                              : bookController.pdfUrl.value == ""
+                                  ? InkWell(
+                                      onTap: () {
+                                        bookController.pickPDF();
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                              "Assets/Icons/upload.png"),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            "Book PDF",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .background,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : InkWell(
+                                      onTap: () {
+                                        bookController.pdfUrl.value = "";
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            "Assets/Icons/delete.png",
+                                            width: 20,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            "Delete Pdf",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.audio_file,
-                                color: Theme.of(context).colorScheme.background,
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Book Audio",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  MyTextFormField(
-                      hintText: "Book title",
-                      icon: Icons.book,
-                      controller: controller),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MultiLineTextField(
-                      hintText: "Book Description", controller: controller),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MyTextFormField(
-                      hintText: "Author Name",
-                      icon: Icons.person,
-                      controller: controller),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MyTextFormField(
-                      hintText: "About Author",
-                      icon: Icons.person,
-                      controller: controller),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                          child: MyTextFormField(
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                MyTextFormField(
+                  hintText: "Book title",
+                  icon: Icons.book,
+                  controller: bookController.title,
+                ),
+                const SizedBox(height: 10),
+                MultiLineTextField(
+                    hintText: "Book Description",
+                    controller: bookController.des),
+                const SizedBox(height: 10),
+                MyTextFormField(
+                  hintText: "Author Name",
+                  icon: Icons.person,
+                  controller: bookController.auth,
+                ),
+                const SizedBox(height: 10),
+                MyTextFormField(
+                  hintText: "About Author",
+                  icon: Icons.person,
+                  controller: bookController.aboutAuth,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MyTextFormField(
+                        isNumber: true,
                         hintText: "Price",
                         icon: Icons.currency_rupee,
-                        controller: controller,
-                      )),
-                      SizedBox(
-                        width: 10,
+                        controller: bookController.price,
                       ),
-                      Expanded(
-                          child: MyTextFormField(
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: MyTextFormField(
                         hintText: "Pages",
+                        isNumber: true,
                         icon: Icons.book,
-                        controller: controller,
-                      ))
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                          child: MyTextFormField(
+                        controller: bookController.pages,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MyTextFormField(
                         hintText: "Language",
                         icon: Icons.language,
-                        controller: controller,
-                      )),
-                      SizedBox(
-                        width: 10,
+                        controller: bookController.language,
                       ),
-                      Expanded(
-                          child: MyTextFormField(
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: MyTextFormField(
                         hintText: "Audio Len",
                         icon: Icons.audiotrack,
-                        controller: controller,
-                      )),
-                      SizedBox(
-                        height: 15,
+                        controller: bookController.audioLen,
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10), // Add space between the fields
+                MyTextFormField(
+                  hintText: "Rating", // Add a new text field for the rating
+                  icon: Icons.star,
+                  controller: bookController.rating,
+                ),
+
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                                width: 1,
-                                color: Theme.of(context).colorScheme.primary),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.close,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Cancel",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
-                              )
-                            ],
-                          ),
+                              width: 2,
+                              color: Colors.red,
+                            )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.close,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "CANCEL",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Colors.red,
+                                  ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.upload_sharp,
-                                color: Theme.of(context).colorScheme.background,
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Post",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background),
-                              )
-                            ],
-                          ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child: Obx(
+                      () => Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        child: bookController.isPdfUploading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  bookController.createBook();
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.upload_sharp,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      "POST",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )
+                    )),
+                  ],
+                ),
+              ]),
+            ),
           ],
         ),
       ),

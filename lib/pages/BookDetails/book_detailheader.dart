@@ -45,9 +45,9 @@ class BookDetailsHeader extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
+              child: Image.network(
                 coverUrl,
-                width: 170,
+                width: 180,
               ),
             )
           ],

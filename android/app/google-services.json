@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1086959685144",
+    "project_id": "storystack-f54d5",
+    "storage_bucket": "storystack-f54d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086959685144:android:ae01427da0d4b58e4bfd6d",
+        "android_client_info": {
+          "package_name": "com.example.storystack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFcPIIJchM1kfbsjeCgBdbw_7qW2clDV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
